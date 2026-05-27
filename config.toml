@@ -1,0 +1,18 @@
+[server]
+host = "0.0.0.0"
+port = 8010
+
+[upstream]
+host = "10.80.5.130"
+port = 8009
+detect_path = "/PerceptionService/Detect"
+health_path = "/"
+timeout_seconds = 300.0
+connect_timeout_seconds = 10.0
+# 限制同时转发到 8009 的请求数，避免高并发压垮下游
+max_concurrent_upstream = 8
+
+[image]
+max_width = 1920
+max_height = 1080
+jpeg_quality = 90
