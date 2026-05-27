@@ -10,7 +10,7 @@ health_path = "/"
 timeout_seconds = 300.0
 connect_timeout_seconds = 10.0
 # 限制同时转发到 8009 的请求数，避免高并发压垮下游
-max_concurrent_upstream = 8
+max_concurrent_upstream = 24
 
 [image]
 max_width = 1920

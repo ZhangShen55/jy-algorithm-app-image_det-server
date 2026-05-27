@@ -1,0 +1,16 @@
+services:
+  image-det-proxy:
+    build: .
+    image: jy-algorithm-app-image-det-server:v1.0_260527
+    container_name: image-det-proxy
+    restart: unless-stopped
+    ports:
+      - "8010:8010"
+    volumes:
+      # 挂载宿主机 config.toml，修改后重启容器生效
+      - ./config.toml:/app/config/config.toml:ro
+    environment:
+      - CONFIG_PATH=/app/config/config.toml
+    # 若 8009 在宿主机，Linux 可用 host 网络或 extra_hosts
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

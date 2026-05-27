@@ -156,6 +156,47 @@ python run.py
 curl http://127.0.0.1:8010/health
 ```
 
+## Docker 部署
+
+`config.toml` **不打包进镜像**，运行时挂载到 `/app/config/config.toml`。
+
+### 构建镜像
+
+```bash
+docker build -t jy-algorithm-app-image-det-server:latest .
+```
+
+### docker run（挂载 config.toml）
+
+```bash
+docker run -d \
+  --name image-det-proxy \
+  -p 8010:8010 \
+  -v "$(pwd)/config.toml:/app/config/config.toml:ro" \
+  -e CONFIG_PATH=/app/config/config.toml \
+  --restart unless-stopped \
+  jy-algorithm-app-image-det-server:latest
+```
+
+修改宿主机 `config.toml` 后重启容器：
+
+```bash
+docker restart image-det-proxy
+```
+
+### docker compose
+
+```bash
+docker compose up -d --build
+docker compose logs -f
+```
+
+### 说明
+
+- 容器内默认 `CONFIG_PATH=/app/config/config.toml`，与 `docker-compose.yml` 挂载路径一致
+- 若下游 `8009` 在宿主机，请将 `config.toml` 中 `upstream.host` 改为宿主机可达地址（如 `host.docker.internal` 或宿主机 IP）
+- 验证：`curl http://127.0.0.1:8010/health`
+
 ## 测试
 
 ```bash
